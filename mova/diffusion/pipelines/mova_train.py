@@ -912,7 +912,7 @@ class MOVATrain(BasePipeline, DiffusionPipeline):
         # The original Wan implementation ensures timestep computation happens in float32.
         # Always use bf16 for subsequent compute to avoid dtype mismatch when weights are bf16 but inputs are fp32.
         model_dtype = torch.bfloat16
-        with torch.autocast("cuda", dtype=torch.float32):
+        with torch.autocast(f"{visual_dit.device}", dtype=torch.float32):
             visual_t = visual_dit.time_embedding(sinusoidal_embedding_1d(visual_dit.freq_dim, timestep))  # [B, C=5120]
             visual_t_mod = visual_dit.time_projection(visual_t).unflatten(1, (6, visual_dit.dim))  # [B, 6, C=5120]
 
@@ -942,7 +942,7 @@ class MOVATrain(BasePipeline, DiffusionPipeline):
         # grid_size: [T // 4 + 1, H // 16, W // 16]
 
         # Move to CUDA first; otherwise expand on CPU costs ~25ms.
-        visual_freqs = tuple(freq.to(visual_x.device) for freq in visual_dit.freqs)
+        visual_freqs = tuple(freq.to(device=visual_x.device, dtype=torch.complex64) for freq in visual_dit.freqs)
         
         visual_freqs = torch.cat([
             visual_freqs[0][:t].view(t, 1, 1, -1).expand(t, h, w, -1),
@@ -1364,7 +1364,7 @@ class MOVATrain(BasePipeline, DiffusionPipeline):
         # --------------------------------------------------
         with torch.no_grad():
             # Audio VAE uses float32
-            with torch.autocast("cuda", dtype=torch.float32):
+            with torch.autocast(f"{self.audio_vae.device}", dtype=torch.float32):
                 if self.audio_vae_type == "dac":
                     x_pad = self.audio_vae.preprocess(audio, sample_rate=self.sample_rate)
                     z, codes, latents, commitment_loss, codebook_loss = self.audio_vae.encode(x_pad)

@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple, Optional
 from einops import rearrange
 
 from .wan_video_dit import RMSNorm, AttentionModule
+from mova.utils.adapter import apply_rotary_pos_emb_adapter
 
 
 # modified from https://github.com/huggingface/transformers/blob/b0db5a02f39ebd2ccffd7f8eb77091fda61f9a1e/src/transformers/models/qwen3/modeling_qwen3.py#L299
@@ -236,7 +237,7 @@ class ConditionalCrossAttention(nn.Module):
             x_cos = x_cos.to(q_view.dtype).to(q_view.device)
             x_sin = x_sin.to(q_view.dtype).to(q_view.device)
             # Expect x_cos/x_sin shape: [B or 1, L, head_dim]
-            q_view, _ = apply_rotary_pos_emb(q_view, q_view, x_cos, x_sin, unsqueeze_dim=2)
+            q_view, _ = apply_rotary_pos_emb_adapter(q_view, q_view, x_cos, x_sin, unsqueeze_dim=2)
             q = rearrange(q_view, 'b l h d -> b l (h d)')
         if y_freqs is not None:
             y_cos, y_sin = y_freqs
@@ -245,7 +246,7 @@ class ConditionalCrossAttention(nn.Module):
             y_cos = y_cos.to(k_view.dtype).to(k_view.device)
             y_sin = y_sin.to(k_view.dtype).to(k_view.device)
             # Expect y_cos/y_sin shape: [B or 1, L, head_dim]
-            _, k_view = apply_rotary_pos_emb(k_view, k_view, y_cos, y_sin, unsqueeze_dim=2)
+            _, k_view = apply_rotary_pos_emb_adapter(k_view, k_view, y_cos, y_sin, unsqueeze_dim=2)
             k = rearrange(k_view, 'b l h d -> b l (h d)')
         x = self.attn(q, k, v)
         return self.o(x)

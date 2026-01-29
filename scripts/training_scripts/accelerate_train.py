@@ -15,6 +15,8 @@ from mova.registry import DATASETS, DIFFUSION_PIPELINES, TRANSFORMS
 from mova.engine.trainer.accelerate.accelerate_trainer import AccelerateTrainer
 from mova.datasets.video_audio_dataset import collate_fn
 
+from mova.utils.adapter import adapt_to_accelerator_device,init_distributed_adapter
+adapt_to_accelerator_device()
 
 def parse_args():
     parser = argparse.ArgumentParser(description="MOVA Training with Accelerate")
@@ -56,6 +58,8 @@ def build_dataloader(cfg):
 def main():
     args = parse_args()
     
+    init_distributed_adapter()
+
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)

@@ -1,6 +1,7 @@
 #!/bin/bash
 # ============================================================
-# MOVA Low Resource LoRA Training Script
+# MOVA Low Resource LoRA Training Script, only support by GPU
+# 
 # This script runs memory-efficient training using:
 # - LoRA for parameter-efficient fine-tuning
 # - Gradient checkpointing to reduce activation memory

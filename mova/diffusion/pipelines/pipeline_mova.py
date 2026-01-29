@@ -348,13 +348,6 @@ class MOVA(DiffusionPipeline):
         cfg_merge = False
         audio_num_samples = int(self.audio_sample_rate * num_frames / video_fps)
 
-        # self.scheduler.set_timesteps(num_inference_steps, denoising_strength=denoising_strength, shift=sigma_shift)
-        # self.scheduler.set_pair_postprocess_by_name(
-        #     "dual_sigma_shift",
-        #     visual_shift=visual_shift,
-        #     audio_shift=audio_shift,
-        # )
-        
         device = self._execution_device
 
         # 4. Prepare timesteps
@@ -488,7 +481,7 @@ class MOVA(DiffusionPipeline):
         video = self.video_processor.postprocess_video(video, output_type="pil")
 
         # decode audio
-        with torch.autocast("cuda", dtype=torch.float32):
+        with torch.autocast(f"{device}", dtype=torch.float32):
             audio = self.audio_vae.decode(audio_latents)  # [B, 1, T]
 
         return video, audio
@@ -532,8 +525,7 @@ class MOVA(DiffusionPipeline):
         if audio_timestep is None:
             audio_timestep = timestep
 
-        # t: timestep_embedding
-        with torch.autocast("cuda", dtype=torch.float32):
+        with torch.autocast(f"{visual_dit.device}", dtype=torch.float32):
             visual_t = visual_dit.time_embedding(sinusoidal_embedding_1d(visual_dit.freq_dim, timestep))  # [B, C=5120]
             visual_t_mod = visual_dit.time_projection(visual_t).unflatten(1, (6, visual_dit.dim))  # [B, 6, C=5120]
 
@@ -560,7 +552,7 @@ class MOVA(DiffusionPipeline):
         # grid_size: [T // 4 + 1, H // 16, W // 16]
 
         # Move to CUDA first; otherwise expand on CPU costs ~25ms.
-        visual_freqs = tuple(freq.to(visual_x.device) for freq in visual_dit.freqs)
+        visual_freqs = tuple(freq.to(device=visual_x.device,dtype=torch.complex64) for freq in visual_dit.freqs)
         
         visual_freqs = torch.cat([
             visual_freqs[0][:t].view(t, 1, 1, -1).expand(t, h, w, -1),

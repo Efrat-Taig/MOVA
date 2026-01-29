@@ -10,6 +10,8 @@ from yunchang.kernels import AttnType
 from mova.datasets.transforms.custom import crop_and_resize
 from mova.diffusion.pipelines.pipeline_mova import MOVA
 from mova.utils.data import save_video_with_audio
+from mova.utils.adapter import adapt_to_accelerator_device, init_distributed_adapter
+adapt_to_accelerator_device()
 
 NEGATIVE_PROMPT = (
     "色调艳丽，过曝，静态，细节模糊不清，字幕，风格，作品，画作，画面，静止，"
@@ -55,8 +57,8 @@ def main():
     # --------------------------------------------------
     # Init distributed
     # --------------------------------------------------
+    init_distributed_adapter()
     local_rank = int(os.environ["LOCAL_RANK"])
-    dist.init_process_group(backend="nccl", device_id=torch.device("cuda", local_rank))
     torch.cuda.set_device(local_rank)
 
     rank = dist.get_rank()

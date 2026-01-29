@@ -15,6 +15,8 @@ from einops import rearrange
 from torch.distributed.tensor import DTensor
 from torch.nn import RMSNorm
 
+from mova.utils.adapter import contiguous_for_channels_last_3d_memory_format,get_compiler_backend,get_longcontext_attention
+
 try:
     from flash_attn_interface import flash_attn_func as flash_attn_3_func
     print("flash_attn_interface loaded from flash_attn_interface")
@@ -91,7 +93,7 @@ def flash_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor, num_heads
     return x
 
 
-@torch.compile(fullgraph=True)
+@torch.compile(fullgraph=True, backend=get_compiler_backend())
 def modulate(x: torch.Tensor, shift: torch.Tensor, scale: torch.Tensor):
     return (x * (1 + scale) + shift)
 
@@ -198,7 +200,7 @@ class USPAttention(nn.Module):
                 "Please install/enable yunchang or avoid using USPAttention."
             )
         self.num_heads = num_heads
-        self.attn = LongContextAttention(ring_impl_type="basic", attn_type=attn_type)
+        self.attn = get_longcontext_attention()
         
     def forward(self, q, k, v):
         q = rearrange(q, "b s (n d) -> b s n d", n=self.num_heads)
@@ -398,7 +400,7 @@ class WanModel(ModelMixin, ConfigMixin):
 
     def patchify(self, x: torch.Tensor,control_camera_latents_input: torch.Tensor = None):
         # NOTE(dhyu): avoid slow_conv
-        x = x.contiguous(memory_format=torch.channels_last_3d)
+        x = contiguous_for_channels_last_3d_memory_format(x)
         x = self.patch_embedding(x)
         if self.control_adapter is not None and control_camera_latents_input is not None:
             y_camera = self.control_adapter(control_camera_latents_input)
