@@ -3,7 +3,7 @@
 # example diffusers inference 1 GPU or NPU
 # ============================================================
 
-MOSSVG_HOME=$(cd "$(dirname "$0")/../" && pwd) && cd ${MOSSVG_HOME}
+MOVA_HOME=$(cd "$(dirname "$0")/../" && pwd) && cd ${MOVA_HOME}
 source scripts/env/env_prepare.sh $(basename "$0" .sh)
 
 CP_SIZE=1

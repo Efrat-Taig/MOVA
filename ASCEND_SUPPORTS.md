@@ -69,7 +69,7 @@ docker pull swr.cn-north-4.myhuaweicloud.com/ascend-sact/ascend-910b-ubuntu:late
 then start the ascend docker image as follows:
 
 ```bash
-docker run -it -d --name ascend-910b-mova --rm \
+docker run -it --rm --name ascend-910b-mova \
     --privileged \
     --network host \
     --device /dev/davinci_manager \
@@ -107,10 +107,10 @@ replace `$PERSONAL_WORKSPACE` with your own workspace path.
 
 ```bash
 ## 360p Resolution Model
-hf download OpenMOSS-Team/MOVA-360p
+hf download OpenMOSS-Team/MOVA-360p --local-dir ${PERSONAL_WORKSPACE}/MOVA/ckpts/MOVA-360p
 
 ## 720p Resolution Model
-hf download OpenMOSS-Team/MOVA-720p
+hf download OpenMOSS-Team/MOVA-720p --local-dir ${PERSONAL_WORKSPACE}/MOVA/ckpts/MOVA-720p
 ```
 
 ## Quick Start
