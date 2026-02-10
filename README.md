@@ -26,6 +26,7 @@ We introduce **MOVA** (**MO**SS **V**ideo and **A**udio), a foundation model des
 - **Asymmetric Dual-Tower Architecture**: Leverages the power of pre-trained video and audio towers, fused via a bidirectional cross-attention mechanism for rich modality interaction.
 
 ## 🔥News!!!
+- 2026/02/10: 🎉We released **MOVA** [technical report](https://arxiv.org/abs/2602.08794) and update [inference workflow](https://github.com/OpenMOSS/MOVA/pull/29).
 - 2026/01/29: 🎉We released **MOVA**, an open-source foundation model for high-fidelity synchronized video–audio generation!!!
 
 ## 🎬Demo
@@ -284,6 +285,23 @@ All peak usage numbers below are measured on **360p, 8-second** video training s
 - [x] Generation Workflow
 - [x] Technical Report
 - [ ] Diffusers Integration
+
+## Citation
+If you find our work helpful, please cite us.
+```
+@misc{openmoss_mova_2026,
+  title         = {MOVA: Towards Scalable and Synchronized Video-Audio Generation},
+  author        = {{SII-OpenMOSS Team} and Donghua Yu and Mingshu Chen and Qi Chen and Qi Luo and Qianyi Wu and Qinyuan Cheng and Ruixiao Li and Tianyi Liang and Wenbo Zhang and Wenming Tu and Xiangyu Peng and Yang Gao and Yanru Huo and Ying Zhu and Yinze Luo and Yiyang Zhang and Yuerong Song and Zhe Xu and Zhiyu Zhang and Chenchen Yang and Cheng Chang and Chushu Zhou and Hanfu Chen and Hongnan Ma and Jiaxi Li and Jingqi Tong and Junxi Liu and Ke Chen and Shimin Li and Songlin Wang and Wei Jiang and Zhaoye Fei and Zhiyuan Ning and Chunguo Li and Chenhui Li and Ziwei He and Zengfeng Huang and Xie Chen and Xipeng Qiu},
+  year          = {2026},
+  month         = feb,
+  eprint        = {2602.08794},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  doi           = {10.48550/arXiv.2602.08794},
+  url           = {https://arxiv.org/abs/2602.08794},
+  note          = {Technical report. Corresponding authors: Xie Chen and Xipeng Qiu. Project leaders: Qinyuan Cheng and Tianyi Liang.}
+}
+```
 
 ## Acknowledgement
 We would like to thank the contributors to [Wan](https://github.com/Wan-Video/Wan2.2), [SGLang](https://github.com/sgl-project/sglang), [diffusers](https://huggingface.co/docs/diffusers/en/index), [HuggingFace](https://huggingface.co/), [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio), and [HunyuanVideo-Foley](https://github.com/Tencent-Hunyuan/HunyuanVideo-Foley) for their great open-source work, which is helpful to this project.
