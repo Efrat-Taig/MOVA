@@ -276,7 +276,7 @@ class AccelerateTrainer:
         if self.is_main_process:
             os.makedirs(self.save_path, exist_ok=True)
         
-        torch.cuda.memory._record_memory_history(enabled='all')
+        # torch.cuda.memory._record_memory_history(enabled='all')
     
     def _setup_lora(self):
         """Configure LoRA"""
