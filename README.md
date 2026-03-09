@@ -6,6 +6,7 @@
     <a href="https://github.com/OpenMOSS/MOVA"><img src="https://img.shields.io/badge/Github-Star-yellow?logo=Github&amp"></a>
     <a href="https://huggingface.co/collections/OpenMOSS-Team/mova"><img src="https://img.shields.io/badge/Huggingface-Download-orange?logo=Huggingface&amp"></a>
     <a href="https://mosi.cn/models/mova"><img src="https://img.shields.io/badge/Website-View-blue?logo=Website&amp"></a>
+    <a href="https://studio.mosi.cn/docs/models/mova?src=github"><img src="https://img.shields.io/badge/API-Apply-green?logo=OpenAI&amp"></a>
     <a href="https://arxiv.org/abs/2602.08794">
       <img src="https://img.shields.io/badge/Arxiv-2602.08794-red?logo=Arxiv&amp">
     </a>
@@ -26,6 +27,8 @@ We introduce **MOVA** (**MO**SS **V**ideo and **A**udio), a foundation model des
 - **Asymmetric Dual-Tower Architecture**: Leverages the power of pre-trained video and audio towers, fused via a bidirectional cross-attention mechanism for rich modality interaction.
 
 ## 🔥News!!!
+- 2026/03/09: 🎉**MOVA API** is now available! Apply for your API key at [studio.mosi.cn](https://studio.mosi.cn/docs/models/mova?src=github) to start generating videos programmatically.
+- 2026/03/09: 🎉**ComfyUI support** is here! Thanks to [@richservo](https://github.com/richservo), you can now use MOVA in ComfyUI at low cost via [comfyui-mova](https://github.com/richservo/comfyui-mova).
 - 2026/02/10: 🎉We released **MOVA** [technical report](https://arxiv.org/abs/2602.08794) and update [inference workflow](https://github.com/OpenMOSS/MOVA/pull/29).
 - 2026/01/29: 🎉We released **MOVA**, an open-source foundation model for high-fidelity synchronized video–audio generation!!!
 
@@ -220,6 +223,26 @@ We provide an **[AI-assisted video generation workflow](./workflow)** for end-to
 
 See the [**workflow README**](./workflow/README.md) for setup, configuration (SGLang server, API keys), and usage.
 
+## API Access
+
+MOVA is available as a hosted API on our platform. You can apply for an API key and start generating synchronized video-audio content without managing any infrastructure.
+
+**Apply here**: [studio.mosi.cn/docs/models/mova](https://studio.mosi.cn/docs/models/mova?src=github)
+
+## ComfyUI Integration
+
+MOVA is supported in [ComfyUI](https://github.com/comfyanonymous/ComfyUI) through the community plugin [comfyui-mova](https://github.com/richservo/comfyui-mova) by [@richservo](https://github.com/richservo). It provides two nodes — **MOVA Model Loader** and **MOVA Generate** — for both Image-to-Video-Audio (I2VA) and Text-to-Video-Audio (T2VA) workflows.
+
+### Installation
+
+```bash
+cd ComfyUI/custom_nodes
+git clone --recursive https://github.com/richservo/comfyui-mova.git
+cd comfyui-mova
+pip install -r requirements.txt
+```
+
+Models download automatically from HuggingFace on first use. See the [comfyui-mova README](https://github.com/richservo/comfyui-mova) for full usage details, VRAM guide, and workflow examples.
 
 ## Training
 ### LoRA Fine-tuning
@@ -284,6 +307,8 @@ All peak usage numbers below are measured on **360p, 8-second** video training s
 - [x] SGLang Integration
 - [x] Generation Workflow
 - [x] Technical Report
+- [x] API Access
+- [x] ComfyUI Integration
 - [ ] Diffusers Integration
 
 ## Citation
