@@ -1,0 +1,13 @@
+nohup: ignoring input
+Loading pipeline components...:   0%|          | 0/9 [00:00<?, ?it/s]Loading pipeline components...:  44%|████▍     | 4/9 [00:00<00:00,  8.41it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s][ALoading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 70.71it/s]
+Loading pipeline components...:  56%|█████▌    | 5/9 [00:00<00:00,  8.52it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s][ALoading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 70.59it/s]
+Loading pipeline components...:  67%|██████▋   | 6/9 [00:00<00:00,  8.69it/s]/home/smiti-user/miniconda3/envs/mova/lib/python3.13/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Successfully removed weight_norm from 74 modules
+Loading pipeline components...:  78%|███████▊  | 7/9 [00:00<00:00,  8.54it/s]
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s][ALoading checkpoint shards: 100%|██████████| 3/3 [00:00<00:00, 191.20it/s]
+Loading pipeline components...: 100%|██████████| 9/9 [00:00<00:00, 11.41it/s]Loading pipeline components...: 100%|██████████| 9/9 [00:00<00:00,  9.76it/s]
+Starting inference...
+  0%|          | 0/30 [00:00<?, ?it/s]  3%|▎         | 1/30 [01:01<29:40, 61.41s/it]  7%|▋         | 2/30 [01:48<24:43, 52.97s/it] 10%|█         | 3/30 [02:35<22:36, 50.24s/it] 13%|█▎        | 4/30 [03:22<21:12, 48.93s/it] 17%|█▋        | 5/30 [04:09<20:05, 48.21s/it] 20%|██        | 6/30 [04:56<19:06, 47.78s/it] 23%|██▎       | 7/30 [05:43<18:12, 47.51s/it] 27%|██▋       | 8/30 [06:30<17:21, 47.34s/it] 30%|███       | 9/30 [07:17<16:31, 47.23s/it] 33%|███▎      | 10/30 [08:04<15:43, 47.16s/it] 37%|███▋      | 11/30 [08:51<14:54, 47.10s/it] 40%|████      | 12/30 [09:58<15:59, 53.30s/it] 43%|████▎     | 13/30 [10:45<14:32, 51.35s/it] 47%|████▋     | 14/30 [11:32<13:20, 50.01s/it] 50%|█████     | 15/30 [12:19<12:16, 49.07s/it] 53%|█████▎    | 16/30 [13:06<11:17, 48.42s/it] 57%|█████▋    | 17/30 [13:53<10:23, 47.95s/it] 60%|██████    | 18/30 [14:39<09:31, 47.64s/it] 63%|██████▎   | 19/30 [15:26<08:41, 47.42s/it] 67%|██████▋   | 20/30 [16:13<07:52, 47.25s/it] 70%|███████   | 21/30 [17:00<07:04, 47.13s/it] 73%|███████▎  | 22/30 [17:47<06:16, 47.06s/it] 77%|███████▋  | 23/30 [18:34<05:29, 47.00s/it] 80%|████████  | 24/30 [19:21<04:41, 46.99s/it] 83%|████████▎ | 25/30 [20:08<03:54, 46.94s/it] 87%|████████▋ | 26/30 [20:54<03:07, 46.92s/it]

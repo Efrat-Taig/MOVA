@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 MOVA experiment runner - runs multiple configs to find the best video.
-Start with quick experiments (360p, 10 steps), then run full experiments.
+Start with quick experiments (360p, 15 steps), then run full experiments.
 """
 
 import subprocess
@@ -26,11 +26,10 @@ from efrat_run import (
 # EXPERIMENT PHASES - Edit to enable/disable phases
 # =============================================================================
 
-# Phase 1: Quick smoke test - low res, few steps, short video (verify it runs)
+# Phase 1: Quick smoke test - low res, short video (15 steps min for decent motion)
 QUICK_EXPERIMENTS = [
-    {"resolution": "360p", "steps": 10, "video_length": 4, "seed": 42},
-    {"resolution": "360p", "steps": 10, "video_length": 4, "seed": 123},
-    {"resolution": "360p", "steps": 10, "video_length": 4, "seed": 456},
+    {"resolution": "360p", "steps": 15, "video_length": 4, "seed": 42},
+    {"resolution": "360p", "steps": 15, "video_length": 4, "seed": 0},
 ]
 
 # Phase 2: Seed sweep at medium quality
@@ -44,11 +43,17 @@ STEPS_EXPERIMENTS = [
     {"resolution": "480p", "steps": 10, "video_length": 6, "seed": 42},
     {"resolution": "480p", "steps": 20, "video_length": 6, "seed": 42},
     {"resolution": "480p", "steps": 30, "video_length": 6, "seed": 42},
+    {"resolution": "480p", "steps": 40, "video_length": 6, "seed": 42},
+    {"resolution": "480p", "steps": 50, "video_length": 6, "seed": 42},
 ]
 
 # Phase 4: Full quality
 FULL_EXPERIMENTS = [
-    {"resolution": "720p", "steps": 30, "video_length": 6, "seed": 42},
+    {"resolution": "720p", "steps": 30, "video_length": 4, "seed": 42},
+    {"resolution": "720p", "steps": 40, "video_length": 4, "seed": 42},
+    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42},
+
 ]
 
 
@@ -92,15 +97,16 @@ def run_experiment(exp: dict) -> bool:
 
 
 def main():
-    experiments = (
-        QUICK_EXPERIMENTS
-        + SEED_EXPERIMENTS
-        + STEPS_EXPERIMENTS
-        + FULL_EXPERIMENTS
-    )
+    experiments = FULL_EXPERIMENTS  # Run only Phase 4 (Full quality)
 
-    print(f"\nMOVA Experiments: {len(experiments)} runs (fully automated)")
-    print("Phases: Quick → Seed sweep → Steps → Full quality\n")
+# experiments = (
+#     QUICK_EXPERIMENTS
+#     + SEED_EXPERIMENTS
+#     + STEPS_EXPERIMENTS
+#     + FULL_EXPERIMENTS
+# )
+
+    print(f"\nMOVA Experiments: {len(experiments)} runs (Phase 4: Full quality only)")
 
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 
