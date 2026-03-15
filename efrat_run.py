@@ -10,15 +10,28 @@ import sys
 # CONFIG - Edit these to control the inference
 # =============================================================================
 
-PROMPT = """A cheerful animated puppy pilot sitting in a small pink helicopter flying in a bright blue sky with soft white clouds. The character looks directly at the camera and happily talks to the viewer. She is smiling, excited, and expressive, like a children's cartoon character.
+PROMPT =  """
+High-quality 3D animation in the style of Paw Patrol, vibrant colors, clean CGI, cinematic lighting, bright and cheerful atmosphere, smooth character animation, Nick Jr aesthetic, 4k render, detailed textures, expressive facial expressions.
 
-She tells the audience about the wonderful day she had — how happy she is and how she ate lots of delicious candies and sweets today. She laughs and says it was amazing and fun. Then she explains that because she ate so many sweets, she is now going to brush her teeth to keep them clean and healthy.
+Skye from Paw Patrol, the cute female cockapoo rescue puppy pilot, wearing her pink pilot goggles and pink vest, flying her small pink helicopter high in a bright blue sky with soft fluffy clouds. The helicopter gently hovers in the air while she sits in the cockpit.
 
-The helicopter gently hovers in the sky while she talks. The tone is joyful, playful, and energetic, like a kids' TV show. Bright colors, soft lighting, cute 3D animation style, friendly facial expressions, cinematic animated lighting, smooth character animation, high-quality children's animation style.
+Skye looks directly into the camera and talks to the viewer like a cheerful kids TV host. She speaks clearly in FIRST PERSON about her own day. She is happy, excited, and very expressive.
 
-Camera: medium close-up, character speaking directly to camera inside the helicopter cockpit.
-Mood: happy, playful, wholesome children's content.
-Style: colorful 3D animated cartoon, soft clouds, bright daylight sky."""
+Dialogue (first person, speaking directly to camera):
+"Hi everyone! I had such a happy day today!"
+"I ate soooo many candies and sweets!"
+"It was so yummy and so much fun!"
+"But now I need to brush my teeth really well so they stay clean and healthy!"
+
+She laughs, smiles, and talks energetically while sitting in the helicopter.
+
+Camera: medium close-up inside the helicopter cockpit, Skye facing the camera.
+Motion: helicopter gently hovering in the sky with soft movement.
+Mood: joyful, playful, energetic children's show.
+Environment: bright daylight sky, soft clouds.
+
+Style: colorful 3D animated cartoon, Paw Patrol style animation.
+"""
 
 REF_PATH = "inputs/sky_in_heli.jpg"
 OUTPUT_DIR = "outputs"
@@ -27,9 +40,19 @@ OUTPUT_BASE_NAME = "puppy_pilot"  # Filename auto-built: {base}_{length}s_{WxH}_
 # Video length: 4, 5, 6, 7, or 8 seconds (sets NUM_FRAMES automatically)
 VIDEO_LENGTH = 6  # seconds
 
-# Video settings (HEIGHT/WIDTH must be divisible by 16)
-HEIGHT = 1280 # 640 848
-WIDTH = 720 # 352 480
+# Resolution: "360p", "480p", or "720p" (WIDTH x HEIGHT, portrait; must be divisible by 16)
+RESOLUTION = "720p"  # 360p=480x848, 480p=640x1120, 720p=720x1280
+RESOLUTIONS = {"360p": (480, 848), "480p": (640, 1120), "720p": (720, 1280)}
+
+# Negative prompt - what to avoid in the generation
+NEGATIVE_PROMPT = (
+    "blurry, overexposed, static, low quality, distorted, ugly, "
+    "worst quality, JPEG artifacts, extra fingers, deformed"
+)
+
+# Video settings (overridden by RESOLUTION above)
+HEIGHT = 1280
+WIDTH = 720
 FPS = 24.0
 
 # Frame counts for each length (num_frames - 1 must be divisible by 4)
@@ -51,7 +74,11 @@ def main():
         print(f"Error: VIDEO_LENGTH must be 4, 5, 6, 7, or 8 (got {VIDEO_LENGTH})")
         sys.exit(1)
 
-    output_name = f"{OUTPUT_BASE_NAME}_{VIDEO_LENGTH}s_{WIDTH}x{HEIGHT}_{NUM_INFERENCE_STEPS}steps.mp4"
+    width, height = RESOLUTIONS.get(RESOLUTION, (WIDTH, HEIGHT))
+    if RESOLUTION not in RESOLUTIONS:
+        print(f"Warning: RESOLUTION '{RESOLUTION}' unknown, using {width}x{height}")
+
+    output_name = f"{OUTPUT_BASE_NAME}_{VIDEO_LENGTH}s_{width}x{height}_{NUM_INFERENCE_STEPS}steps.mp4"
     output_path = f"{OUTPUT_DIR}/{output_name}"
     print(f"Output: {output_path}")
 
@@ -59,10 +86,11 @@ def main():
         "torchrun", "--nproc_per_node=1", "scripts/inference_single.py",
         "--ckpt_path", CKPT_PATH,
         "--prompt", PROMPT,
+        "--negative_prompt", NEGATIVE_PROMPT,
         "--ref_path", REF_PATH,
         "--output_path", output_path,
-        "--height", str(HEIGHT),
-        "--width", str(WIDTH),
+        "--height", str(height),
+        "--width", str(width),
         "--num_frames", str(num_frames),
         "--fps", str(FPS),
         "--num_inference_steps", str(NUM_INFERENCE_STEPS),
