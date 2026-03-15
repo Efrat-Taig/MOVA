@@ -10,17 +10,119 @@ from pathlib import Path
 
 # Import config from efrat_run
 from efrat_run import (
-    PROMPT,
     REF_PATH,
     OUTPUT_DIR,
     OUTPUT_BASE_NAME,
     RESOLUTIONS,
-    NEGATIVE_PROMPT,
     FRAMES_BY_LENGTH,
     CKPT_PATH,
     ATTN_TYPE,
     OFFLOAD,
 )
+
+# Suffix added to all prompts
+PROMPT_SUFFIX = " static camera composition maintained for the entire clip"
+
+# Prompt type 1 (from efrat_run.py)
+PROMPT_TYPE_1 = """
+High-quality 3D animation in the style of Paw Patrol, vibrant colors, clean CGI, cinematic lighting, bright and cheerful atmosphere, smooth character animation, Nick Jr aesthetic, 4k render, detailed textures, expressive facial expressions.
+
+Skye from Paw Patrol, the cute female cockapoo rescue puppy pilot, wearing her pink pilot goggles and pink vest, flying her small pink helicopter high in a bright blue sky with soft fluffy clouds. The helicopter gently hovers in the air while she sits in the cockpit.
+
+Skye looks directly into the camera and talks to the viewer like a cheerful kids TV host. She speaks clearly in FIRST PERSON about her own day. She is happy, excited, and very expressive.
+
+Dialogue (first person, speaking directly to camera):
+"Hi everyone! I had such a happy day today!"
+"I ate soooo many candies and sweets!"
+"It was so yummy and so much fun!"
+"But now I need to brush my teeth really well so they stay clean and healthy!"
+
+She laughs, smiles, and talks energetically while sitting in the helicopter.
+
+Camera: medium close-up inside the helicopter cockpit, Skye facing the camera.
+Motion: helicopter gently hovering in the sky with soft movement.
+Mood: joyful, playful, energetic children's show.
+Environment: bright daylight sky, soft clouds.
+
+Style: colorful 3D animated cartoon, Paw Patrol style animation.
+""" + PROMPT_SUFFIX
+
+# Prompt type 2
+PROMPT_TYPE_2 = """
+High-quality 3D animation in the style of Paw Patrol, vibrant colors, clean CGI, cinematic lighting, bright cheerful atmosphere, smooth character animation, Nick Jr aesthetic, 4k render, detailed textures, expressive facial expressions.
+
+Skye from Paw Patrol, the female cockapoo rescue puppy pilot wearing pink pilot goggles and a pink vest, sitting inside her small pink helicopter. The helicopter is hovering in a bright blue sky with soft fluffy clouds.
+
+IMPORTANT: The entire video is ONE continuous shot. The camera angle does NOT change. No cuts, no scene transitions, no jump cuts, no camera switches.
+
+The camera stays fixed in a stable medium close-up inside the helicopter cockpit. Skye remains centered in the frame and faces the camera the whole time. The helicopter gently hovers but the framing stays consistent.
+
+Skye looks directly into the camera and talks to the viewer like a cheerful kids TV host. She speaks in FIRST PERSON about her own day. She is happy, excited and expressive.
+
+Dialogue (first person, speaking to camera):
+"Hi everyone! I had such a happy day today!"
+"I ate soooo many candies and sweets!"
+"It was so yummy and so much fun!"
+"But now I need to brush my teeth really well so they stay clean and healthy!"
+
+Her mouth movements match the speech. She smiles, laughs and talks energetically.
+
+Motion: only subtle animation — slight helicopter hover, small head movement, blinking, natural mouth movement.
+Camera: locked camera, stable framing, no zoom, no rotation, no angle change.
+Shot: single continuous shot for the entire clip.
+Mood: joyful, playful children's show.
+Environment: bright daylight sky with soft clouds.
+""" + PROMPT_SUFFIX
+
+# Prompt type 3
+PROMPT_TYPE_3 = """
+Stable single-shot 3D animated scene of Skye from Paw Patrol inside her pink rescue helicopter cockpit. High-quality children's TV animation, Paw Patrol CGI style, vibrant colors, clean rendering, cinematic but simple lighting, smooth animation, detailed textures.
+
+Scene setup:
+Skye, the female cockapoo rescue puppy wearing pink pilot goggles and a pink vest, sits in the pilot seat of her pink helicopter. The helicopter is calmly hovering in a bright blue sky with soft clouds visible through the cockpit window.
+
+Camera and framing:
+Locked camera.
+Single continuous shot.
+Medium close-up framing from inside the cockpit.
+Skye centered in frame and facing forward.
+No camera movement, no cuts, no transitions, no angle change.
+
+Action:
+Skye speaks directly to the viewer like a cheerful children's show host. She talks in first person about her day. Her mouth moves naturally while speaking, with small head movements, blinking, and expressive facial animation.
+
+Dialogue:
+"Hi friends! Guess what? I had such a fun day today!"
+"I ate lots and lots of yummy candy!"
+"It was super sweet and really fun!"
+"But now I need to brush my teeth really well!"
+
+Motion:
+Very gentle helicopter hover motion only.
+Subtle character animation: blinking, small head movement, natural speaking mouth motion.
+
+Mood:
+Bright, friendly, playful children's show atmosphere.
+""" + PROMPT_SUFFIX
+
+PROMPTS = {1: PROMPT_TYPE_1, 2: PROMPT_TYPE_2, 3: PROMPT_TYPE_3}
+
+# Negative prompt type 1 (from efrat_run.py)
+NEGATIVE_PROMPT_TYPE_1 = (
+    "blurry, overexposed, static, low quality, distorted, ugly, "
+    "worst quality, JPEG artifacts, extra fingers, deformed"
+)
+
+# Negative prompt type 2
+NEGATIVE_PROMPT_TYPE_2 = (
+    "scene change, shot change, jump cut, camera switch, camera movement, "
+    "zoom, pan, rotation, changing angle, changing perspective, "
+    "multiple scenes, montage, cinematic cuts, dynamic camera, "
+    "blurry, low quality, compression artifacts, distorted face, "
+    "deformed body, extra limbs, extra fingers"
+)
+
+NEGATIVE_PROMPTS = {1: NEGATIVE_PROMPT_TYPE_1, 2: NEGATIVE_PROMPT_TYPE_2}
 
 # =============================================================================
 # EXPERIMENT PHASES - Edit to enable/disable phases
@@ -49,11 +151,18 @@ STEPS_EXPERIMENTS = [
 
 # Phase 4: Full quality
 FULL_EXPERIMENTS = [
-    {"resolution": "720p", "steps": 30, "video_length": 4, "seed": 42},
-    {"resolution": "720p", "steps": 40, "video_length": 4, "seed": 42},
+    {"resolution": "360p", "steps": 50, "video_length": 4, "seed": 42},
+    {"resolution": "360p", "steps": 50, "video_length": 8, "seed": 42},
+    {"resolution": "480p", "steps": 50, "video_length": 4, "seed": 42},
     {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42},
     {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42},
+]
 
+# Phase 5: Prompt experiments - compare prompt types at 720p, 50 steps, 4s
+PROMPT_EXPERIMENTS = [
+    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 1},
+    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 2},
+    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 3},
 ]
 
 
@@ -63,18 +172,25 @@ def run_experiment(exp: dict) -> bool:
     steps = exp["steps"]
     video_length = exp["video_length"]
     seed = exp.get("seed", 42)
+    prompt_type = exp.get("prompt_type", 1)
+
+    prompt = PROMPTS[prompt_type]
+    neg_prompt_type = 1 if prompt_type == 1 else 2
+    negative_prompt = NEGATIVE_PROMPTS[neg_prompt_type]
 
     width, height = RESOLUTIONS[resolution]
     num_frames = FRAMES_BY_LENGTH[video_length]
 
     output_name = f"{OUTPUT_BASE_NAME}_{video_length}s_{width}x{height}_{steps}steps_seed{seed}.mp4"
+    if "prompt_type" in exp:
+        output_name = f"{OUTPUT_BASE_NAME}_pt{prompt_type}_{video_length}s_{width}x{height}_{steps}steps_seed{seed}.mp4"
     output_path = str(Path(OUTPUT_DIR) / output_name)
 
     cmd = [
         "torchrun", "--nproc_per_node=1", "scripts/inference_single.py",
         "--ckpt_path", CKPT_PATH,
-        "--prompt", PROMPT,
-        "--negative_prompt", NEGATIVE_PROMPT,
+        "--prompt", prompt,
+        "--negative_prompt", negative_prompt,
         "--ref_path", REF_PATH,
         "--output_path", output_path,
         "--height", str(height),
@@ -88,7 +204,8 @@ def run_experiment(exp: dict) -> bool:
     ]
 
     print(f"\n{'='*60}")
-    print(f"Running: {resolution} | {steps} steps | {video_length}s | seed={seed}")
+    prompt_info = f" | prompt_type={prompt_type}" if "prompt_type" in exp else ""
+    print(f"Running: {resolution} | {steps} steps | {video_length}s | seed={seed}{prompt_info}")
     print(f"Output: {output_path}")
     print("="*60)
 
@@ -97,7 +214,8 @@ def run_experiment(exp: dict) -> bool:
 
 
 def main():
-    experiments = FULL_EXPERIMENTS  # Run only Phase 4 (Full quality)
+    # experiments = FULL_EXPERIMENTS  # Run only Phase 4 (Full quality)
+    experiments = PROMPT_EXPERIMENTS  # Run Phase 5: prompt type comparison (720p, 50 steps, 4s)
 
 # experiments = (
 #     QUICK_EXPERIMENTS
@@ -106,7 +224,8 @@ def main():
 #     + FULL_EXPERIMENTS
 # )
 
-    print(f"\nMOVA Experiments: {len(experiments)} runs (Phase 4: Full quality only)")
+    phase_name = "Phase 5: Prompt experiments" if experiments == PROMPT_EXPERIMENTS else "Phase 4: Full quality only"
+    print(f"\nMOVA Experiments: {len(experiments)} runs ({phase_name})")
 
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 
