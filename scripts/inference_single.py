@@ -56,7 +56,7 @@ def main():
     # Init distributed
     # --------------------------------------------------
     local_rank = int(os.environ["LOCAL_RANK"])
-    dist.init_process_group(backend="nccl", device_id=torch.device("cuda", local_rank))
+    dist.init_process_group(backend="nccl")
     torch.cuda.set_device(local_rank)
 
     rank = dist.get_rank()
@@ -64,11 +64,14 @@ def main():
 
     cp_size = args.cp_size
     dp_size = world_size // cp_size
-    mesh = DeviceMesh(
-        "cuda",
-        torch.arange(dist.get_world_size()).view(dp_size, cp_size),
-        mesh_dim_names=("dp", "cp"),
-    )
+    cp_mesh = None
+    if cp_size > 1:
+        mesh = DeviceMesh(
+            "cuda",
+            torch.arange(dist.get_world_size()).view(dp_size, cp_size),
+            mesh_dim_names=("dp", "cp"),
+        )
+        cp_mesh = mesh["cp"]
 
     torch.manual_seed(args.seed)
     torch_dtype = torch.bfloat16
@@ -139,7 +142,7 @@ def main():
         sigma_shift=args.sigma_shift,
         cfg_scale=args.cfg_scale,
         seed=args.seed,
-        cp_mesh=mesh["cp"],
+        cp_mesh=cp_mesh,
         remove_video_dit=args.remove_video_dit,
     )
 
