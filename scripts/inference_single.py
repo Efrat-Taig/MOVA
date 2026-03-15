@@ -165,8 +165,16 @@ def main():
 
         print(f"Saved to {args.output_path}")
 
-    dist.barrier()
-    dist.destroy_process_group()
+    try:
+        dist.barrier()
+    except Exception as e:
+        if is_main_process():
+            print(f"Warning: barrier failed during cleanup (video was saved): {e}")
+    finally:
+        try:
+            dist.destroy_process_group()
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":
