@@ -2,11 +2,33 @@
 """
 MOVA experiment runner - runs multiple configs to find the best video.
 Start with quick experiments (360p, 15 steps), then run full experiments.
+
+SETUP (run once per new terminal/session):
+    conda activate mova
+    pip install yunchang   # or: python run_experiments.py --setup
+
+RUN:
+    python run_experiments.py
 """
 
 import subprocess
 import sys
 from pathlib import Path
+
+# --setup: install yunchang and exit (run once per new env)
+if "--setup" in sys.argv:
+    print("Installing yunchang...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "yunchang"], check=True)
+    print("Setup complete. Run: python run_experiments.py")
+    sys.exit(0)
+
+# Fail fast if yunchang is missing (inference_single.py needs it)
+try:
+    import yunchang.kernels  # noqa: F401
+except ModuleNotFoundError:
+    print(__doc__)
+    print("Run: pip install yunchang  (or: python run_experiments.py --setup)")
+    sys.exit(1)
 
 # Import config from efrat_run
 from efrat_run import (
@@ -151,18 +173,21 @@ STEPS_EXPERIMENTS = [
 
 # Phase 4: Full quality
 FULL_EXPERIMENTS = [
-    {"resolution": "360p", "steps": 50, "video_length": 4, "seed": 42},
-    {"resolution": "360p", "steps": 50, "video_length": 8, "seed": 42},
-    {"resolution": "480p", "steps": 50, "video_length": 4, "seed": 42},
-    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42},
-    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42},
+    {"resolution": "360p", "steps": 50, "video_length": 10, "seed": 42},
+    {"resolution": "360p", "steps": 50, "video_length": 15, "seed": 42},
+    {"resolution": "480p", "steps": 50, "video_length": 20, "seed": 42},
+    {"resolution": "720p", "steps": 50, "video_length": 20, "seed": 42},
+    {"resolution": "720p", "steps": 50, "video_length": 20, "seed": 42},
 ]
 
 # Phase 5: Prompt experiments - compare prompt types at 720p, 50 steps, 4s
 PROMPT_EXPERIMENTS = [
-    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 1},
-    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 2},
-    {"resolution": "720p", "steps": 50, "video_length": 4, "seed": 42, "prompt_type": 3},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42, "prompt_type": 1},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42, "prompt_type": 2},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 42, "prompt_type": 3},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 0, "prompt_type": 1},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 0, "prompt_type": 2},
+    {"resolution": "720p", "steps": 50, "video_length": 8, "seed": 0, "prompt_type": 3},
 ]
 
 
@@ -214,17 +239,16 @@ def run_experiment(exp: dict) -> bool:
 
 
 def main():
-    # experiments = FULL_EXPERIMENTS  # Run only Phase 4 (Full quality)
-    experiments = PROMPT_EXPERIMENTS  # Run Phase 5: prompt type comparison (720p, 50 steps, 4s)
+    experiments = FULL_EXPERIMENTS  # Phase 4 only
 
-# experiments = (
+    # experiments = (
 #     QUICK_EXPERIMENTS
 #     + SEED_EXPERIMENTS
 #     + STEPS_EXPERIMENTS
 #     + FULL_EXPERIMENTS
 # )
 
-    phase_name = "Phase 5: Prompt experiments" if experiments == PROMPT_EXPERIMENTS else "Phase 4: Full quality only"
+    phase_name = "Phase 4: Full quality"
     print(f"\nMOVA Experiments: {len(experiments)} runs ({phase_name})")
 
     Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)

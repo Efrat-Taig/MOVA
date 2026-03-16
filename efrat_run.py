@@ -56,7 +56,10 @@ WIDTH = 720
 FPS = 24.0
 
 # Frame counts for each length (num_frames - 1 must be divisible by 4)
-FRAMES_BY_LENGTH = {4: 97, 5: 121, 6: 145, 7: 169, 8: 193}
+FRAMES_BY_LENGTH = {
+    4: 97, 5: 121, 6: 145, 7: 169, 8: 193,
+    10: 241, 15: 361, 20: 481,
+}
 
 # Inference settings
 NUM_INFERENCE_STEPS = 20
