@@ -1,0 +1,7 @@
+{
+  "description": "Veo-only: storybook crossing, in-world buddy dialogue (no viewer-directed safety lecturing)",
+  "specific_prompts": [
+    "[VISUAL PROMPT]:\nA warm, storybook-style opening frame. The camera sits at the characters' eye level in a medium-wide shot. A small pup in pink flight-style gear and a shepherd pup in blue police-style gear stand together on the edge of a bright sidewalk beside a cheerful painted crossing marker. Soft white stripes mark a calm, empty lane in a colorful toy-like town. In the background, a whimsical street, shops, and a tall tower with a red roof on a green hill read softly out of focus. Both pups wear simple vests, backpacks, and hats. They playfully glance left and right together as part of their teamwork routine. The road is quiet and sunny; the mood is gentle comedy, not a lesson to the viewer.\n\n[AUDIO/DIALOGUE PROMPT]:\nBlue police pup (playful, in-character): \"Okay partner\u2014our adventure club chant!\"\nPink aviator pup (bright, talking to the blue pup): \"We pause, peek both ways, and only glide forward when our path looks crystal clear!\"\nBlue police pup: \"That's the spirit\u2014nice and smooth, just like practice!\""
+  ],
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, blurring, motion blur, darkness, night time, grim atmosphere, static, out of focus, characters merged, melting, bad composition, overly stylized, outdated cartoon style, fast vehicles, crowded roads, photoreal gore"
+}

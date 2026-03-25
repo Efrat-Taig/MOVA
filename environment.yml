@@ -1,0 +1,11 @@
+# OpenMOSS MOVA: base conda env (Python 3.13).
+# After: conda env create -f environment.yml && conda activate mova
+#   bash scripts/install_pytorch_cuda126.sh   # CUDA 12.x wheels FIRST (matches driver 12.8)
+#   pip install -e .                            # then MOVA (avoids PyPI torch cu130 mismatch)
+#   pip install moviepy av huggingface_hub hf_transfer  # optional helpers
+name: mova
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13
+  - pip

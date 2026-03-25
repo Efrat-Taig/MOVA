@@ -1,0 +1,27 @@
+{
+  "description": "Garden bench calm dialogue — two cartoon pups (generic wording for API safety) BM_v2 camera-movement / lip-sync stress.",
+  "global_prompt": "High-quality 3D CGI children's cartoon style, vibrant colors, clean CGI, cinematic lighting, smooth character animation, preschool-friendly aesthetic, 4k render, detailed textures, expressive facial expressions",
+  "duration": 10,
+  "specific_prompts": [
+    "[VISUAL PROMPT]:\nA peaceful and relaxing opening frame. A shepherd pup in blue police-style gear and a small pup in pink flight-style gear sit side-by-side on a wooden bench in a beautiful public garden, matching the reference start frame layout. The background shows a colorful harbor town: a tall tower on a hill, a town hall–style building, and a calm beach under soft blue skies. The pink pup appears slightly tired; she rubs an eye with her paw. The blue pup sits beside her in a supportive posture, looking at her gently. The sun is soft and caressing, creating a calm, end-of-day atmosphere.\n\n[DIALOGUE & AUDIO]:\nPink aviator pup (in a slightly tired voice): \"I had a really hard time falling asleep last night... I just kept thinking about all of tomorrow's missions.\"\nBlue police pup (in a soothing tone): \"I understand you. It happens to me sometimes too. But do you know what helps? Before bed, I just close my eyes, take three deep breaths, and think of one good thing that happened today.\"\nPink aviator pup (with a small smile): \"That's a great idea. Tonight, I'll try that!\""
+  ],
+  "seed": 42,
+  "dimensions": {
+    "width": 1280,
+    "height": 698
+  },
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, harsh shadows, motion blur, darkness, grim atmosphere, static, out of focus, characters merged, melting, bad composition, overly stylized, outdated cartoon style, midday harsh sun, chaotic energy",
+  "fps": 24,
+  "motion_bucket": 7,
+  "images": [
+    {
+      "path": "start_frame.png",
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  ],
+  "camera_movement_prompts": [
+    "[CAMERA & MOTION]: Cinematic dolly zoom (Hitchcock-style): simultaneous push/pull so the background perspective shifts; foreground characters stay readable; lip movement must stay stable and believably synced with all spoken dialogue during the zoom.",
+    "[CAMERA & MOTION]: Rapid horizontal pan following the active speaker; crisp motion with minimal motion blur on faces; mouth timing and lip shapes must remain coherent through the pan."
+  ]
+}

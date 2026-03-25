@@ -1,0 +1,7 @@
+{
+  "description": "Veo-only: storybook crossing, pep talk between partners only (no fourth-wall child address)",
+  "specific_prompts": [
+    "[VISUAL PROMPT]:\nA bright storybook-style opening frame at eye level, medium-wide. A small pup in pink flight-style gear and a shepherd pup in blue police-style gear stand on a sunny sidewalk beside a friendly painted crossing marker. Soft stripes cross a quiet, toy-like lane; the background shows a colorful whimsical town and a tower on a green hill, gently blurred. Both pups wear simple vests, backpacks, and hats; they glance left and right together in a lighthearted rhythm. The scene feels like a cheerful cartoon beat, not a public service announcement.\n\n[DIALOGUE & ACTION]:\nBlue police pup (warm, speaking only to the pink pup): \"Remember our team rule, Skye\u2014we always pause, peek both ways, and step out only when the coast looks clear. You've got this!\"\n(Visual action during speech): The pink aviator pup smiles and nods beside the blue pup; she does not speak."
+  ],
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, blurring, motion blur, darkness, night time, grim atmosphere, static, out of focus, characters merged, melting, bad composition, overly stylized, outdated cartoon style, fast vehicles, crowded roads, photoreal gore"
+}

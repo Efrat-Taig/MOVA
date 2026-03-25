@@ -1,0 +1,23 @@
+{
+  "description": "Backyard trampoline \u2014 two cartoon pups, visual + dialogue (generic wording for API safety)",
+  "global_prompt": "High-quality 3D CGI children's cartoon style, vibrant colors, clean CGI, cinematic lighting, bright and cheerful atmosphere, smooth character animation, preschool-friendly aesthetic, 4k render, detailed textures, expressive facial expressions",
+  "duration": 10,
+  "specific_prompts": [
+    "[VISUAL PROMPT]:\nA bright daylight, medium-wide cinematic 3D animation shot of a sunlit backyard. In the center stands a blue trampoline enclosed by a safety net. A small pup in pink aviator-style gear is caught mid-air executing a spectacular backflip high above the trampoline. Her body is arched with her legs over her head, showing an enthusiastic and joyful expression. Nearby, a shepherd pup in blue police-style gear is also jumping on the trampoline, looking up at her with admiration and pure excitement. The house, a swing set, a green garden, and a wooden fence are in the background. Smooth motion, highly detailed.\n\n[AUDIO/DIALOGUE PROMPT]:\nBlue police pup (excited voice): \"Yee-haw! We're so high up! Who knew a trampoline could be this much fun? Wow! This is amazing!\"\nPink aviator pup (panting excitedly, mid-flip): \"I love the feeling of flying! Check out my awesome backflip!\"\nBlue police pup: \"You're the best!\"\nAmbiance: Subtle sound of wind, the bouncing sound from the trampoline mat."
+  ],
+  "seed": 42,
+  "dimensions": {
+    "width": 1280,
+    "height": 698
+  },
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, blurring, motion blur, darkness, night time, grim atmosphere, static, out of focus, characters merged, figure stuck in netting, melting, bad composition, overly stylized, outdated cartoon style",
+  "fps": 24,
+  "motion_bucket": 7,
+  "images": [
+    {
+      "path": "start_frame.png",
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  ]
+}

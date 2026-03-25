@@ -13,6 +13,7 @@ authors = [{ name = "MOVA contributors" }]
 dependencies = [
   "torch",
   "torchvision",
+  "torchaudio",
   "pillow",
   "tqdm",
   "imageio",

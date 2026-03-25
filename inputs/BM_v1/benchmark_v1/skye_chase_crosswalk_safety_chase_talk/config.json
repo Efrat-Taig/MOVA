@@ -1,0 +1,23 @@
+{
+  "description": "Crosswalk safety \u2014 one pup monologue, other nods (generic wording for API safety)",
+  "global_prompt": "High-quality 3D CGI children's cartoon style, vibrant colors, clean CGI, cinematic lighting, bright and cheerful atmosphere, smooth character animation, preschool-friendly aesthetic, 4k render, detailed textures, expressive facial expressions",
+  "duration": 10,
+  "specific_prompts": [
+    "[VISUAL PROMPT]:\nA clean, inviting opening frame for a short educational explanation video. The camera is positioned at the characters' eye level across the crosswalk, in a medium-wide shot. A small pup in pink flight-style gear and a shepherd pup in blue police-style gear stand together on the edge of the sidewalk, right next to the blue pedestrian crossing sign. The white crosswalk unfolds across the road before them. In the background, a colorful small-town street and a tall tower with a red roof on a green hill are clearly visible, yet slightly blurred (shallow depth of field) to keep the emphasis on the characters. Both pups wear simple vests, backpacks, and hats. They simultaneously turn their heads left, then right, performing a thorough traffic check. No cars are moving near them. The overall lighting is bright and cheerful.\n\n[DIALOGUE & ACTION]:\nBlue police pup (in a serious and clear voice, looking directly at the camera): \"Dear children, listen up! Before you cross the road, always stop! Look left, then right. And only when the road is completely clear, do you cross safely. Take care of yourselves!\"\n(Visual action during speech): The pink aviator pup nods firmly in agreement beside the blue pup, but does not speak."
+  ],
+  "seed": 42,
+  "dimensions": {
+    "width": 1280,
+    "height": 698
+  },
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, blurring, motion blur, darkness, night time, grim atmosphere, static, out of focus, characters merged, melting, bad composition, overly stylized, outdated cartoon style, moving cars, traffic danger",
+  "fps": 24,
+  "motion_bucket": 7,
+  "images": [
+    {
+      "path": "start_frame.png",
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  ]
+}

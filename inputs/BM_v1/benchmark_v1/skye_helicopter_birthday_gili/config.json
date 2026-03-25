@@ -1,0 +1,23 @@
+{
+  "description": "Helicopter aerial birthday message \u2014 generic wording for API safety; personal name Gili kept",
+  "global_prompt": "High-quality 3D CGI children's cartoon style, vibrant colors, clean CGI, cinematic lighting, smooth character animation, preschool-friendly aesthetic, 4k render, detailed textures, expressive facial expressions",
+  "duration": 10,
+  "specific_prompts": [
+    "[VISUAL DESCRIPTION & MOVEMENT]:\nA powerful aerial opening frame. A small pup in pink flight gear sits in the cockpit of a pink cartoon helicopter hovering at the viewer's eye level.\nObject Movement: The main rotor and the tail rotor spin at high speed, creating a realistic motion blur effect.\nCamera Movement: The camera starts with a wide shot and executes a slow, cinematic zoom-in toward the pup's smiling face until she fills most of the frame.\nBackground: Below, a sunny coastline and harbor town spread out with a tall tower on a green hill; clouds drift gently to suggest motion.\nExpression: The pup looks excited; she waves her paw at the camera with joyful energy. 3D animation style, high quality.\n\n[DIALOGUE - WHAT SHE SAYS]:\nPink aviator pup (in an enthusiastic, high-pitched voice, over muffled engine noise): \"Hi Gili! Look where I am! I flew all the way over the coast to tell you... Congratulations!\"\n(Visual Action during pause): The helicopter performs a small gentle turn.\nPink aviator pup: \"I'm so excited for you! May you have a simply perfect birthday, full of adventures and smiles. Always remember\u2014the sky's the limit! Happy Birthday, Gili!\""
+  ],
+  "seed": 42,
+  "dimensions": {
+    "width": 698,
+    "height": 1280
+  },
+  "negative_prompt": "low quality, bad anatomy, deformed bodies, distorted faces, scary expressions, extra limbs, impossible positions, glitch, artifacts, darkness, grim atmosphere, static rotor blades, frozen helicopter rotors, out of focus face, characters merged, melting, bad composition, overly stylized, outdated cartoon style, wrong vehicle, cockpit closed incorrectly",
+  "fps": 24,
+  "motion_bucket": 7,
+  "images": [
+    {
+      "path": "start_frame.png",
+      "frame_idx": 0,
+      "strength": 0.9
+    }
+  ]
+}

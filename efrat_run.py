@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 """
 MOVA inference script - edit the config below and run with: python efrat_run.py
+
+H100 / driver CUDA 12.x: install torch, torchvision, and torchaudio from the *same*
+CUDA 12 wheel index so extensions agree (avoids libcudart.so.13 vs cu126 mismatch):
+
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+
+Or run: bash scripts/install_pytorch_cuda126.sh
 """
 
+import os
 import subprocess
 import sys
 
@@ -85,8 +93,19 @@ def main():
     output_path = f"{OUTPUT_DIR}/{output_name}"
     print(f"Output: {output_path}")
 
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Single-GPU / some cloud images: avoid NCCL P2P/IB edge cases (see MOVA H100 notes).
+    env = os.environ.copy()
+    env.setdefault("NCCL_P2P_DISABLE", "1")
+    env.setdefault("NCCL_IB_DISABLE", "1")
+
     cmd = [
-        "torchrun", "--nproc_per_node=1", "scripts/inference_single.py",
+        sys.executable,
+        "-m",
+        "torch.distributed.run",
+        "--nproc_per_node=1",
+        "scripts/inference_single.py",
         "--ckpt_path", CKPT_PATH,
         "--prompt", PROMPT,
         "--negative_prompt", NEGATIVE_PROMPT,
@@ -100,8 +119,8 @@ def main():
         "--attn_type", ATTN_TYPE,
         "--offload", OFFLOAD,
     ]
-    print("Running:", " ".join(cmd[:6]), "...")
-    sys.exit(subprocess.run(cmd).returncode)
+    print("Running:", " ".join(cmd[:8]), "...")
+    sys.exit(subprocess.run(cmd, env=env, cwd=os.path.dirname(os.path.abspath(__file__))).returncode)
 
 
 if __name__ == "__main__":

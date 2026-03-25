@@ -8,6 +8,7 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: torch
 Requires-Dist: torchvision
+Requires-Dist: torchaudio
 Requires-Dist: pillow
 Requires-Dist: tqdm
 Requires-Dist: imageio

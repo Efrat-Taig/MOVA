@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+# One-shot setup on a new Linux machine so you can run: python efrat_run.py
+#
+# Usage (from repo root):
+#   bash efrat_bootstrap_new_machin
+#   ./efrat_bootstrap_new_machin
+#
+# From elsewhere:
+#   bash /path/to/MOVA/efrat_bootstrap_new_machin
+#
+# Options:
+#   --download-model   Download MOVA-720p from Hugging Face (~tens of GB; needs disk + network).
+#                      Without this flag, the script only installs Python deps; you must place
+#                      weights under checkpoints/MOVA-720p yourself.
+#
+# Requires: git clone of MOVA already present, and conda (Miniconda/Anaconda) on PATH or in ~/miniconda3.
+#
+set -euo pipefail
+
+DOWNLOAD_MODEL=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --download-model) DOWNLOAD_MODEL=1 ;;
+    -h|--help)
+      cat <<'EOF'
+Usage: bash efrat_bootstrap_new_machin [OPTIONS]
+
+Sets up conda env "mova", PyTorch (cu126), pip install -e MOVA, and optional HF download.
+
+Options:
+  --download-model   Download MOVA-720p from Hugging Face (large; needs disk & network).
+  -h, --help         Show this help.
+
+Environment:
+  MOVA_CONDA_ENV     Conda env name (default: mova)
+
+Requires: MOVA repo cloned, conda installed (see Miniconda).
+EOF
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1 (use --help)" >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "${REPO_ROOT}"
+
+resolve_conda() {
+  if [[ -n "${CONDA_EXE:-}" && -x "${CONDA_EXE}" ]]; then
+    echo "${CONDA_EXE}"
+    return 0
+  fi
+  if command -v conda >/dev/null 2>&1; then
+    command -v conda
+    return 0
+  fi
+  for candidate in "${HOME}/miniconda3/bin/conda" "${HOME}/anaconda3/bin/conda" "${HOME}/Miniconda3/bin/conda"; do
+    if [[ -x "${candidate}" ]]; then
+      echo "${candidate}"
+      return 0
+    fi
+  done
+  return 1
+}
+
+CONDA="$(resolve_conda)" || {
+  echo "ERROR: conda not found. Install Miniconda, then:" >&2
+  echo "  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh" >&2
+  echo "  bash Miniconda3-latest-Linux-x86_64.sh -b -u" >&2
+  echo "  ~/miniconda3/bin/conda init bash && source ~/.bashrc" >&2
+  exit 1
+}
+
+echo "Using conda: ${CONDA}"
+
+ENV_NAME="${MOVA_CONDA_ENV:-mova}"
+if "${CONDA}" run -n "${ENV_NAME}" true 2>/dev/null; then
+  echo "Conda env '${ENV_NAME}' already exists."
+else
+  echo "Creating conda env '${ENV_NAME}' (Python 3.13)..."
+  "${CONDA}" create -n "${ENV_NAME}" python=3.13 -y
+fi
+
+run_in_env() {
+  "${CONDA}" run -n "${ENV_NAME}" "$@"
+}
+
+echo "Upgrading pip..."
+run_in_env python -m pip install --upgrade pip
+
+echo "Installing PyTorch (CUDA 12.6 wheels: torch + torchvision + torchaudio)..."
+run_in_env python -m pip install --upgrade torch torchvision torchaudio \
+  --index-url https://download.pytorch.org/whl/cu126
+
+echo "Installing MOVA (editable)..."
+run_in_env python -m pip install -e "${REPO_ROOT}"
+
+echo "Installing common extras..."
+run_in_env python -m pip install moviepy av huggingface_hub hf_transfer || true
+
+mkdir -p "${REPO_ROOT}/inputs" "${REPO_ROOT}/outputs" "${REPO_ROOT}/checkpoints/MOVA-720p"
+
+if [[ "${DOWNLOAD_MODEL}" -eq 1 ]]; then
+  echo "Downloading OpenMOSS-Team/MOVA-720p (this is large and can take a long time)..."
+  export HF_HUB_ENABLE_HF_TRANSFER="${HF_HUB_ENABLE_HF_TRANSFER:-1}"
+  run_in_env huggingface-cli download OpenMOSS-Team/MOVA-720p \
+    --local-dir "${REPO_ROOT}/checkpoints/MOVA-720p" \
+    --local-dir-use-symlinks False
+else
+  echo "Skipping model download (pass --download-model to fetch MOVA-720p)."
+  echo "If checkpoints/MOVA-720p is empty, run:" >&2
+  echo "  conda activate ${ENV_NAME}" >&2
+  echo "  huggingface-cli download OpenMOSS-Team/MOVA-720p --local-dir checkpoints/MOVA-720p --local-dir-use-symlinks False" >&2
+fi
+
+echo ""
+echo "Checking GPU + PyTorch..."
+run_in_env python -c "import torch; print('  CUDA available:', torch.cuda.is_available(), '|', torch.__version__)"
+
+REF="${REPO_ROOT}/inputs/sky_in_heli.jpg"
+if [[ ! -f "${REF}" ]]; then
+  echo ""
+  echo "NOTE: Reference image missing: ${REF}" >&2
+  echo "  Add that file, or edit REF_PATH in efrat_run.py (image-to-video requires a first frame)." >&2
+fi
+
+echo ""
+echo "Done."
+echo "Next steps in a new terminal:"
+echo "  conda activate ${ENV_NAME}"
+echo "  cd ${REPO_ROOT}"
+echo "  python efrat_run.py"
